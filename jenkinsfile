@@ -1,0 +1,36 @@
+pipeline{
+    agent any
+    
+    stages{
+        stage('git'){
+            steps{
+                git 'https://github.com/coolgourav147/spring-boot-war-example.git '
+            }
+        }
+    stage('Build job'){
+        steps{
+            sh 'mvn test'
+        }
+    }
+    
+    stage('build '){
+        steps{
+            sh 'mvn install'
+        }
+    }
+    stage('tomcat'){
+        steps{
+            sshagent(['ip-172-31-17-111']) {
+                
+                sh "rm -rf /var/lib/tomcat9/webapps/"
+                sh "ssh root@172.31.17.111 ls /var/lib/"
+                 sh 'scp -o StrictHostKeyChecking=no target/*.war root@172.31.17.111:7777:/var/lib/tomcat9/webapps/'   
+         
+    // some block
+}
+        }
+    }
+        
+    }
+    
+}
